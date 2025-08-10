@@ -31,6 +31,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
       // Create appointment data with consistent format
       Map<String, dynamic> appointmentData = {
         'timestamp': FieldValue.serverTimestamp(),
+        'appointmentDate': selectedDate
+            .toIso8601String(), // Store the selected date
+        'appointmentDateFormatted': DateFormat(
+          'yyyy-MM-dd',
+        ).format(selectedDate), // Store formatted date for easier reading
       };
 
       // Add vet or groom specific data
@@ -286,6 +291,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                                 groomName: widget.groomData != null
                                     ? bookingData['name']
                                     : null,
+                                appointmentDate:
+                                    selectedDate, // Pass the selected date
                                 shouldSave:
                                     false, // Don't save again since we already saved above
                               ),

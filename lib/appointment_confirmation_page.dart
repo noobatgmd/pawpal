@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 class AppointmentConfirmationPage extends StatefulWidget {
   final TimeOfDay? vetTime;
   final TimeOfDay? groomTime;
   final String? vetName;
   final String? groomName;
+  final DateTime? appointmentDate; // Add date parameter
   final bool shouldSave; // Add this parameter to control saving
 
   AppointmentConfirmationPage({
@@ -14,6 +16,7 @@ class AppointmentConfirmationPage extends StatefulWidget {
     this.groomTime,
     this.vetName,
     this.groomName,
+    this.appointmentDate,
     this.shouldSave = false, // Default to false to prevent duplicate saves
   });
 
@@ -70,6 +73,15 @@ class _AppointmentConfirmationPageState
         'timestamp': FieldValue.serverTimestamp(),
         'createdAt': DateTime.now().toIso8601String(),
       };
+
+      // Add appointment date if provided
+      if (widget.appointmentDate != null) {
+        dataToSave['appointmentDate'] = widget.appointmentDate!
+            .toIso8601String();
+        dataToSave['appointmentDateFormatted'] = DateFormat(
+          'yyyy-MM-dd',
+        ).format(widget.appointmentDate!);
+      }
 
       // Add vet data if exists
       if (widget.vetName != null && widget.vetTime != null) {
@@ -226,6 +238,45 @@ class _AppointmentConfirmationPageState
     return null;
   }
 
+  DateTime? _parseAppointmentDate(Map<String, dynamic> appointment) {
+    // Try to parse from appointmentDate field first
+    if (appointment['appointmentDate'] != null) {
+      try {
+        return DateTime.parse(appointment['appointmentDate']);
+      } catch (e) {
+        print("Error parsing appointmentDate: $e");
+      }
+    }
+
+    // Try to parse from appointmentDateFormatted field
+    if (appointment['appointmentDateFormatted'] != null) {
+      try {
+        return DateTime.parse(appointment['appointmentDateFormatted']);
+      } catch (e) {
+        print("Error parsing appointmentDateFormatted: $e");
+      }
+    }
+
+    return null;
+  }
+
+  String _formatAppointmentDate(DateTime? date) {
+    if (date == null) return 'Date not specified';
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = today.add(Duration(days: 1));
+    final appointmentDate = DateTime(date.year, date.month, date.day);
+
+    if (appointmentDate == today) {
+      return 'Today, ${DateFormat('MMM dd, yyyy').format(date)}';
+    } else if (appointmentDate == tomorrow) {
+      return 'Tomorrow, ${DateFormat('MMM dd, yyyy').format(date)}';
+    } else {
+      return DateFormat('EEEE, MMM dd, yyyy').format(date);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -359,6 +410,8 @@ class _AppointmentConfirmationPageState
     final timeStr = appointment[isVet ? 'vetTime' : 'groomTime'] ?? '';
     final timeOfDay = _parseTimeString(timeStr);
     final formattedTime = timeOfDay?.format(context) ?? timeStr;
+    final appointmentDate = _parseAppointmentDate(appointment);
+    final formattedDate = _formatAppointmentDate(appointmentDate);
 
     return Card(
       elevation: 5,
@@ -393,6 +446,8 @@ class _AppointmentConfirmationPageState
                       ),
                       SizedBox(height: 8),
                       _buildDetailRow(isVet ? 'Vet Name:' : 'Groomer:', name),
+                      SizedBox(height: 4),
+                      _buildDetailRow('Date:', formattedDate),
                       SizedBox(height: 4),
                       _buildDetailRow('Time:', formattedTime),
                     ],
