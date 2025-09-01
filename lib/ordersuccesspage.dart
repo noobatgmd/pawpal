@@ -24,11 +24,13 @@ class OrderSuccessPage extends StatelessWidget {
           children: [
             Icon(Icons.check_circle, color: Colors.white),
             SizedBox(width: 8),
-            Text(
-              'Order Success',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            Flexible(
+              child: Text(
+                'Order Success',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
@@ -52,12 +54,12 @@ class OrderSuccessPage extends StatelessWidget {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(16),
             child: Column(
               children: [
                 // Success Animation/Icon
                 Container(
-                  padding: EdgeInsets.all(30),
+                  padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [Colors.green.shade100, Colors.green.shade200],
@@ -74,18 +76,18 @@ class OrderSuccessPage extends StatelessWidget {
                   ),
                   child: Icon(
                     Icons.pets,
-                    size: 80,
+                    size: 60,
                     color: Colors.green.shade700,
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
 
                 // Success Message
                 Container(
-                  padding: EdgeInsets.all(24),
+                  padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.1),
@@ -100,7 +102,7 @@ class OrderSuccessPage extends StatelessWidget {
                       Text(
                         '🎉 Order Placed Successfully! 🎉',
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.green.shade700,
                         ),
@@ -110,7 +112,7 @@ class OrderSuccessPage extends StatelessWidget {
                       Text(
                         'Thanks for choosing us!\nYour furry friend\'s essentials are on the way!',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           color: Colors.grey.shade600,
                           height: 1.5,
                         ),
@@ -120,7 +122,7 @@ class OrderSuccessPage extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 30),
+                SizedBox(height: 24),
 
                 // Order Details Header
                 Container(
@@ -130,20 +132,20 @@ class OrderSuccessPage extends StatelessWidget {
                     gradient: LinearGradient(
                       colors: [Colors.orange.shade100, Colors.yellow.shade100],
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     children: [
                       Icon(
                         Icons.receipt_long,
-                        size: 24,
+                        size: 20,
                         color: Colors.orange.shade700,
                       ),
-                      SizedBox(width: 12),
+                      SizedBox(width: 8),
                       Text(
                         'Order Details',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.brown.shade700,
                         ),
@@ -152,7 +154,7 @@ class OrderSuccessPage extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 16),
+                SizedBox(height: 12),
 
                 // Order Items
                 ListView.builder(
@@ -165,7 +167,7 @@ class OrderSuccessPage extends StatelessWidget {
                       margin: EdgeInsets.only(bottom: 12),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.1),
@@ -176,12 +178,14 @@ class OrderSuccessPage extends StatelessWidget {
                         ],
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: EdgeInsets.all(12),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Product Image - Fixed size for mobile
                             Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(8),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey.withOpacity(0.1),
@@ -191,16 +195,18 @@ class OrderSuccessPage extends StatelessWidget {
                                 ],
                               ),
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(8),
                                 child: Image.asset(
                                   item['img'],
-                                  width: 240,
-                                  height: 240,
+                                  width: 80,
+                                  height: 80,
                                   fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                            SizedBox(width: 16),
+                            SizedBox(width: 12),
+
+                            // Product Details - Expanded to take remaining space
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,59 +215,64 @@ class OrderSuccessPage extends StatelessWidget {
                                     item['name'],
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       color: Colors.brown.shade700,
                                     ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   SizedBox(height: 4),
                                   Text(
                                     item['desc'],
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 11,
                                       color: Colors.grey.shade600,
                                     ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   SizedBox(height: 8),
+
+                                  // Quantity and Price in a Row
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
                                         padding: EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 4,
+                                          horizontal: 6,
+                                          vertical: 2,
                                         ),
                                         decoration: BoxDecoration(
                                           color: Colors.blue.shade50,
                                           borderRadius: BorderRadius.circular(
-                                            8,
+                                            6,
                                           ),
                                         ),
                                         child: Text(
                                           'Qty: ${item['quantity'] ?? 1}',
                                           style: TextStyle(
-                                            fontSize: 12,
+                                            fontSize: 10,
                                             color: Colors.blue.shade700,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                       ),
-                                      Spacer(),
                                       Container(
                                         padding: EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 4,
+                                          horizontal: 6,
+                                          vertical: 2,
                                         ),
                                         decoration: BoxDecoration(
                                           color: Colors.green.shade100,
                                           borderRadius: BorderRadius.circular(
-                                            8,
+                                            6,
                                           ),
                                         ),
                                         child: Text(
                                           'SGD \$${(item['price'] * (item['quantity'] ?? 1)).toStringAsFixed(2)}',
                                           style: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 12,
                                             color: Colors.green.shade800,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -279,14 +290,14 @@ class OrderSuccessPage extends StatelessWidget {
                   },
                 ),
 
-                SizedBox(height: 20),
+                SizedBox(height: 16),
 
                 // Order Summary
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.1),
@@ -301,24 +312,28 @@ class OrderSuccessPage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.calculate, color: Colors.orange.shade700),
+                          Icon(
+                            Icons.calculate,
+                            color: Colors.orange.shade700,
+                            size: 20,
+                          ),
                           SizedBox(width: 8),
                           Text(
                             'Payment Summary',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.brown.shade700,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 12),
                       Container(
-                        padding: EdgeInsets.all(16),
+                        padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: Colors.grey.shade50,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: Column(
                           children: [
@@ -333,24 +348,24 @@ class OrderSuccessPage extends StatelessWidget {
                                   'Total Amount',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     color: Colors.brown.shade700,
                                   ),
                                 ),
                                 Container(
                                   padding: EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 6,
+                                    horizontal: 10,
+                                    vertical: 4,
                                   ),
                                   decoration: BoxDecoration(
                                     color: Colors.green.shade100,
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
                                     'SGD \$${total.toStringAsFixed(2)}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20,
+                                      fontSize: 16,
                                       color: Colors.green.shade800,
                                     ),
                                   ),
@@ -364,16 +379,16 @@ class OrderSuccessPage extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 30),
+                SizedBox(height: 20),
 
                 // Delivery Info
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [Colors.blue.shade50, Colors.purple.shade50],
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
                     children: [
@@ -382,25 +397,26 @@ class OrderSuccessPage extends StatelessWidget {
                           Icon(
                             Icons.local_shipping,
                             color: Colors.blue.shade700,
+                            size: 20,
                           ),
-                          SizedBox(width: 12),
+                          SizedBox(width: 8),
                           Text(
                             'Delivery Information',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: Colors.brown.shade700,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 12),
+                      SizedBox(height: 8),
                       Text(
                         '📦 Your order will be delivered within 2-3 business days\n🐕 We\'ll send you tracking updates via email\n💝 Thank you for trusting us with your pet\'s needs!',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           color: Colors.grey.shade700,
-                          height: 1.5,
+                          height: 1.4,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -408,7 +424,7 @@ class OrderSuccessPage extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 30),
+                SizedBox(height: 20),
 
                 // Continue Shopping Button
                 SizedBox(
@@ -420,17 +436,17 @@ class OrderSuccessPage extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange.shade600,
                       foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       elevation: 3,
                     ),
-                    icon: Icon(Icons.pets),
+                    icon: Icon(Icons.pets, size: 20),
                     label: Text(
                       'Continue Shopping',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -448,18 +464,18 @@ class OrderSuccessPage extends StatelessWidget {
 
   Widget _buildSummaryRow(String label, double amount) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.symmetric(vertical: 3),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
           ),
           Text(
             'SGD \$${amount.toStringAsFixed(2)}',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
               color: Colors.brown.shade700,
             ),

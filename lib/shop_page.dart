@@ -794,10 +794,19 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   Widget _buildProductCard(BuildContext context, Map<String, dynamic> product) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardWidth = screenWidth < 600
+        ? screenWidth *
+              0.4 // Mobile: 40% of screen width
+        : screenWidth < 900
+        ? screenWidth *
+              0.3 // Tablet: 30% of screen width
+        : 200.0; // Desktop: Fixed 200px width
+
     return GestureDetector(
       onTap: () => _showItemPopup(context, product),
       child: Container(
-        width: 500,
+        width: cardWidth,
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -822,8 +831,8 @@ class _ShopPageState extends State<ShopPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                height: 80,
-                width: 80,
+                height: screenWidth < 600 ? 60 : 80, // Smaller image on mobile
+                width: screenWidth < 600 ? 60 : 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
@@ -836,12 +845,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
-                    product['img'],
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image.asset(product['img'], fit: BoxFit.cover),
                 ),
               ),
               SizedBox(height: 12),
@@ -850,7 +854,9 @@ class _ShopPageState extends State<ShopPage> {
                   product['name'],
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                    fontSize: screenWidth < 600
+                        ? 12
+                        : 15, // Smaller font on mobile
                     color: Colors.brown.shade700,
                   ),
                   textAlign: TextAlign.center,
@@ -866,10 +872,12 @@ class _ShopPageState extends State<ShopPage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  'SGD \$${product['price']}',
+                  'SGD \$${product['price']},',
                   style: TextStyle(
                     color: Colors.orange.shade800,
-                    fontSize: 13,
+                    fontSize: screenWidth < 600
+                        ? 11
+                        : 13, // Smaller font on mobile
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -899,52 +907,67 @@ class _ShopPageState extends State<ShopPage> {
     IconData icon,
   ) {
     final ScrollController scrollController = ScrollController();
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 25),
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.orange.shade100,
-                borderRadius: BorderRadius.circular(12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: Colors.orange.shade700, size: 20),
               ),
-              child: Icon(icon, color: Colors.orange.shade700, size: 20),
-            ),
-            SizedBox(width: 12),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.brown.shade700,
+              SizedBox(width: 12),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: screenWidth < 600
+                      ? 18
+                      : 20, // Responsive title size
+                  fontWeight: FontWeight.bold,
+                  color: Colors.brown.shade700,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         SizedBox(height: 16),
         SizedBox(
-          height: 180,
+          height: screenWidth < 600 ? 160 : 180, // Smaller height on mobile
           child: Stack(
             children: [
-              ListView(
+              ListView.builder(
                 controller: scrollController,
                 scrollDirection: Axis.horizontal,
-                children: products
-                    .map((p) => _buildProductCard(context, p))
-                    .toList(),
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                itemCount: products.length,
+                itemBuilder: (context, index) =>
+                    _buildProductCard(context, products[index]),
               ),
+
+              // Only show navigation arrows on larger screens
               Positioned(
                 left: 0,
                 top: 0,
                 bottom: 0,
                 child: Container(
-                  width: 30,
+                  width: screenWidth < 600 ? 25 : 30,
                   alignment: Alignment.center,
-                  color: Colors.white.withOpacity(0.5),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
+                    ),
+                  ),
                   child: IconButton(
                     icon: Icon(Icons.arrow_back_ios, size: 20),
                     onPressed: () {
@@ -968,7 +991,13 @@ class _ShopPageState extends State<ShopPage> {
                 child: Container(
                   width: 30,
                   alignment: Alignment.center,
-                  color: Colors.white.withOpacity(0.5),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      bottomLeft: Radius.circular(15),
+                    ),
+                  ),
                   child: IconButton(
                     icon: Icon(Icons.arrow_forward_ios, size: 20),
                     onPressed: () {
@@ -994,6 +1023,8 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
@@ -1006,6 +1037,9 @@ class _ShopPageState extends State<ShopPage> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
+                fontSize: screenWidth < 600
+                    ? 18
+                    : 20, // Responsive app bar title
               ),
             ),
           ],
@@ -1082,11 +1116,15 @@ class _ShopPageState extends State<ShopPage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(
+            screenWidth < 600 ? 12 : 16,
+          ), // Less padding on mobile
           child: ListView(
             children: [
               Container(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(
+                  screenWidth < 600 ? 12 : 16,
+                ), // Less padding on mobile
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Colors.orange.shade100, Colors.yellow.shade100],
@@ -1095,13 +1133,19 @@ class _ShopPageState extends State<ShopPage> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.pets, size: 30, color: Colors.orange.shade700),
+                    Icon(
+                      Icons.pets,
+                      size: screenWidth < 600 ? 24 : 30,
+                      color: Colors.orange.shade700,
+                    ), // Smaller icon on mobile
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         'Everything your furry friends need!',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: screenWidth < 600
+                              ? 14
+                              : 16, // Smaller font on mobile
                           fontWeight: FontWeight.w600,
                           color: Colors.brown.shade700,
                         ),

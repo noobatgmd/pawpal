@@ -31,7 +31,7 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
       'tempClosed': false,
     },
     {
-      'name': 'The Star VIsta',
+      'name': 'The Star Vista',
       'lat': 1.30705,
       'lng': 103.78845,
       'address': '1 Vista Exchange Green, Singapore 138617',
@@ -395,11 +395,16 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
           children: [
             Icon(Icons.shopping_bag_outlined, color: Colors.black),
             SizedBox(width: 8),
-            Text(
-              'Pet Friendly Malls in Singapore',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+            Expanded(
+              child: Text(
+                'Pet Friendly Malls in Singapore',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 16,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ),
           ],
@@ -413,7 +418,7 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
           },
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(_showSuggestions ? 208 : 48),
+          preferredSize: Size.fromHeight(_showSuggestions ? 200 : 48),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Column(
@@ -423,6 +428,7 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText: 'Search Pet-Friendly Malls by name...',
+                    hintStyle: TextStyle(fontSize: 14),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.search),
                       onPressed: () {
@@ -434,6 +440,10 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
                     ),
                     fillColor: Colors.white,
                     filled: true,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                   ),
                   onSubmitted: (value) {
                     _searchAndZoom();
@@ -441,7 +451,7 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
                 ),
                 if (_showSuggestions)
                   Container(
-                    constraints: BoxConstraints(maxHeight: 200),
+                    constraints: BoxConstraints(maxHeight: 150),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(color: Colors.grey.shade300),
@@ -453,7 +463,17 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
                       itemBuilder: (context, index) {
                         final item = _suggestions[index];
                         return ListTile(
-                          title: Text(item['name']),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 2,
+                          ),
+                          dense: true,
+                          title: Text(
+                            item['name'],
+                            style: TextStyle(fontSize: 14),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
                           onTap: () {
                             _searchController.text = item['name'];
                             _searchAndZoom();
@@ -578,97 +598,111 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
                           showDialog(
                             context: context,
                             builder: (ctx) => AlertDialog(
-                              title: Text(run['name']),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Address with copy
-                                  if (run['address'] != null)
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: SelectableText(
-                                            run['address'],
-                                            style: const TextStyle(
-                                              fontSize: 14,
+                              title: Text(
+                                run['name'],
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Address with copy
+                                    if (run['address'] != null)
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: SelectableText(
+                                              run['address'],
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.copy,
-                                            size: 18,
+                                          IconButton(
+                                            icon: const Icon(
+                                              Icons.copy,
+                                              size: 18,
+                                            ),
+                                            onPressed: () {
+                                              Clipboard.setData(
+                                                ClipboardData(
+                                                  text: run['address'],
+                                                ),
+                                              );
+                                              ScaffoldMessenger.of(
+                                                ctx,
+                                              ).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    "Address copied!",
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                          onPressed: () {
-                                            Clipboard.setData(
-                                              ClipboardData(
-                                                text: run['address'],
-                                              ),
+                                        ],
+                                      ),
+                                    const SizedBox(height: 8),
+
+                                    Text(
+                                      _statusText(run),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: color,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _hoursLine(run),
+                                      style: TextStyle(fontSize: 13),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    if (run['rating'] != null)
+                                      Text(
+                                        'Rating: ${run['rating']} ⭐',
+                                        style: TextStyle(fontSize: 13),
+                                      ),
+                                    const SizedBox(height: 12),
+                                    if (run['mapUrl'] != null)
+                                      InkWell(
+                                        onTap: () async {
+                                          final url = run['mapUrl'].toString();
+                                          if (await canLaunchUrl(
+                                            Uri.parse(url),
+                                          )) {
+                                            await launchUrl(
+                                              Uri.parse(url),
+                                              mode: LaunchMode
+                                                  .externalApplication,
                                             );
+                                          } else {
                                             ScaffoldMessenger.of(
                                               ctx,
                                             ).showSnackBar(
                                               const SnackBar(
                                                 content: Text(
-                                                  "Address copied!",
+                                                  'Could not open Google Maps',
                                                 ),
                                               ),
                                             );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  const SizedBox(height: 8),
-
-                                  Text(
-                                    _statusText(run),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: color,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(_hoursLine(run)),
-                                  const SizedBox(height: 8),
-                                  if (run['rating'] != null)
-                                    Text('Rating: ${run['rating']} ⭐'),
-                                  const SizedBox(height: 12),
-                                  if (run['mapUrl'] != null)
-                                    InkWell(
-                                      onTap: () async {
-                                        final url = run['mapUrl'].toString();
-                                        if (await canLaunchUrl(
-                                          Uri.parse(url),
-                                        )) {
-                                          await launchUrl(
-                                            Uri.parse(url),
-                                            mode:
-                                                LaunchMode.externalApplication,
-                                          );
-                                        } else {
-                                          ScaffoldMessenger.of(
-                                            ctx,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                'Could not open Google Maps',
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      child: const Text(
-                                        'Open in Google Maps',
-                                        style: TextStyle(
-                                          color: Colors.blue,
-                                          decoration: TextDecoration.underline,
+                                          }
+                                        },
+                                        child: const Text(
+                                          'Open in Google Maps',
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            decoration:
+                                                TextDecoration.underline,
+                                            fontSize: 13,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                ],
+                                  ],
+                                ),
                               ),
                               actions: [
                                 TextButton(
@@ -711,11 +745,9 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
                   margin: EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16),
-                    ),
+                    borderRadius: BorderRadius.circular(12),
                     boxShadow: [
-                      BoxShadow(color: Colors.black26, blurRadius: 10),
+                      BoxShadow(color: Colors.black26, blurRadius: 8),
                     ],
                   ),
                   child: Column(
@@ -723,18 +755,20 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _selectedPetFriendlyMalls!['name'] ??
-                            'Unknown PetFriendlyMalls',
+                        _selectedPetFriendlyMalls!['name'] ?? 'Unknown Mall',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       if (_selectedPetFriendlyMalls!['rating'] != null)
                         Padding(
                           padding: EdgeInsets.only(top: 4),
                           child: Text(
                             'Rating: ${_selectedPetFriendlyMalls!['rating']} ⭐',
+                            style: TextStyle(fontSize: 14),
                           ),
                         ),
                       if (_selectedPetFriendlyMalls != null) ...[
@@ -743,6 +777,7 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: _markerColor(_selectedPetFriendlyMalls!),
+                            fontSize: 14,
                           ),
                         ),
                         SizedBox(height: 4),
@@ -752,6 +787,7 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
                           padding: EdgeInsets.only(top: 4),
                           child: Text(
                             'Tel: ${_selectedPetFriendlyMalls!['tel']}',
+                            style: TextStyle(fontSize: 13),
                           ),
                         ),
                       SizedBox(height: 8),
@@ -760,6 +796,7 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
                         style: TextStyle(
                           color: Colors.blue,
                           decoration: TextDecoration.underline,
+                          fontSize: 13,
                         ),
                       ),
                     ],
@@ -771,7 +808,7 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
           // Legend at bottom right:
           Positioned(
             bottom: 20,
-            right: 10,
+            right: 8,
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
@@ -781,6 +818,7 @@ class _PetFriendlyMallsPageState extends State<PetFriendlyMallsPage> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   _legendItem(Colors.red, "Open"),
                   _legendItem(Colors.amber, "Closed"),
@@ -800,9 +838,9 @@ Widget _legendItem(Color color, String label) {
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Icon(Icons.location_on, color: color, size: 20),
+      Icon(Icons.location_on, color: color, size: 16),
       const SizedBox(width: 4),
-      Text(label, style: const TextStyle(fontSize: 13)),
+      Text(label, style: const TextStyle(fontSize: 11)),
     ],
   );
 }

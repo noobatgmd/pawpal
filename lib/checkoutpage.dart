@@ -230,6 +230,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 600;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
@@ -323,12 +326,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     color: Colors.orange.shade700,
                                   ),
                                   SizedBox(width: 12),
-                                  Text(
-                                    'Review Your Order',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown.shade700,
+                                  Expanded(
+                                    child: Text(
+                                      'Review Your Order',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.brown.shade700,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -362,12 +367,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         color: Colors.orange.shade700,
                                       ),
                                       SizedBox(width: 8),
-                                      Text(
-                                        'Payment Method',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.brown.shade700,
+                                      Expanded(
+                                        child: Text(
+                                          'Payment Method',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.brown.shade700,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -404,8 +411,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                     fontWeight: FontWeight.bold,
                                                     color:
                                                         Colors.green.shade800,
+                                                    fontSize: 14,
                                                   ),
                                                 ),
+                                                SizedBox(height: 2),
                                                 Text(
                                                   _savedCardDetails!['nameOnCard']!,
                                                   style: TextStyle(
@@ -413,6 +422,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                         Colors.green.shade700,
                                                     fontSize: 12,
                                                   ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ],
                                             ),
@@ -424,6 +435,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                               style: TextStyle(
                                                 color: Colors.orange.shade600,
                                                 fontWeight: FontWeight.bold,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ),
@@ -455,6 +467,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             style: TextStyle(
                                               color: Colors.orange.shade700,
                                               fontWeight: FontWeight.bold,
+                                              fontSize: 14,
                                             ),
                                           ),
                                           SizedBox(height: 4),
@@ -484,7 +497,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             icon: Icon(Icons.add, size: 16),
                                             label: Text(
                                               'Add Payment Method',
-                                              style: TextStyle(fontSize: 14),
+                                              style: TextStyle(fontSize: 12),
                                             ),
                                           ),
                                         ],
@@ -496,7 +509,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             ),
                             SizedBox(height: 16),
 
-                            // Cart Items List
+                            // Cart Items List - FIXED FOR MOBILE
                             ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
@@ -518,273 +531,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     ],
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(16),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey.withOpacity(
-                                                  0.1,
-                                                ),
-                                                spreadRadius: 1,
-                                                blurRadius: 4,
-                                              ),
-                                            ],
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                            child: Image.asset(
-                                              item['img'],
-                                              width: 240,
-                                              height: 240,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 16),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                item['name'],
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                  color: Colors.brown.shade700,
-                                                ),
-                                              ),
-                                              SizedBox(height: 4),
-                                              Text(
-                                                item['desc'],
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.grey.shade600,
-                                                ),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              SizedBox(height: 8),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 8,
-                                                  vertical: 4,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.orange.shade100,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                                child: Text(
-                                                  'SGD \$${(item['price'] * (item['quantity'] ?? 1)).toStringAsFixed(2)}',
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color:
-                                                        Colors.orange.shade800,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(height: 12),
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          Colors.grey.shade100,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            20,
-                                                          ),
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        IconButton(
-                                                          icon: Icon(
-                                                            Icons
-                                                                .remove_circle_outline,
-                                                            size: 20,
-                                                            color: Colors
-                                                                .orange
-                                                                .shade600,
-                                                          ),
-                                                          onPressed: () {
-                                                            if (item['quantity'] >
-                                                                1) {
-                                                              setState(() {
-                                                                item['quantity']--;
-                                                              });
-                                                              widget
-                                                                  .onCartChanged(
-                                                                    _cart,
-                                                                  );
-                                                            } else {
-                                                              _removeItem(
-                                                                index,
-                                                              );
-                                                            }
-                                                          },
-                                                        ),
-                                                        Container(
-                                                          padding:
-                                                              EdgeInsets.symmetric(
-                                                                horizontal: 8,
-                                                              ),
-                                                          child: Text(
-                                                            '${item['quantity'] ?? 1}',
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color: Colors
-                                                                  .brown
-                                                                  .shade700,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        IconButton(
-                                                          icon: Icon(
-                                                            Icons
-                                                                .add_circle_outline,
-                                                            size: 20,
-                                                            color: Colors
-                                                                .orange
-                                                                .shade600,
-                                                          ),
-                                                          onPressed: () {
-                                                            if ((item['quantity'] ??
-                                                                    1) <
-                                                                item['stock']) {
-                                                              setState(() {
-                                                                item['quantity']++;
-                                                              });
-                                                              widget
-                                                                  .onCartChanged(
-                                                                    _cart,
-                                                                  );
-                                                            } else {
-                                                              ScaffoldMessenger.of(
-                                                                context,
-                                                              ).showSnackBar(
-                                                                SnackBar(
-                                                                  content: Row(
-                                                                    children: [
-                                                                      Icon(
-                                                                        Icons
-                                                                            .pets,
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                      SizedBox(
-                                                                        width:
-                                                                            8,
-                                                                      ),
-                                                                      Text(
-                                                                        'Reached max stock limit!',
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .orange
-                                                                          .shade600,
-                                                                ),
-                                                              );
-                                                            }
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Spacer(),
-                                                  IconButton(
-                                                    icon: Container(
-                                                      padding: EdgeInsets.all(
-                                                        6,
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.red.shade50,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              8,
-                                                            ),
-                                                      ),
-                                                      child: Icon(
-                                                        Icons.delete_outline,
-                                                        color:
-                                                            Colors.red.shade600,
-                                                        size: 20,
-                                                      ),
-                                                    ),
-                                                    onPressed: () {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext context) {
-                                                          return AlertDialog(
-                                                            title: Text(
-                                                              'Confirm Removal',
-                                                            ),
-                                                            content: Text(
-                                                              'Are you sure you want to remove this item from cart?',
-                                                            ),
-                                                            actions: [
-                                                              TextButton(
-                                                                child: Text(
-                                                                  'No',
-                                                                  style: TextStyle(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                ),
-                                                                onPressed: () =>
-                                                                    Navigator.of(
-                                                                      context,
-                                                                    ).pop(), // close dialog
-                                                              ),
-                                                              TextButton(
-                                                                child: Text(
-                                                                  'Yes, Remove',
-                                                                  style: TextStyle(
-                                                                    color: Colors
-                                                                        .red,
-                                                                  ),
-                                                                ),
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                    context,
-                                                                  ).pop(); // close dialog
-                                                                  _removeItem(
-                                                                    index,
-                                                                  ); // actually remove item
-                                                                },
-                                                              ),
-                                                            ],
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
+                                    padding: EdgeInsets.all(
+                                      isSmallScreen ? 12 : 16,
                                     ),
+                                    child: isSmallScreen
+                                        ? _buildMobileCartItem(item, index)
+                                        : _buildDesktopCartItem(item, index),
                                   ),
                                 );
                               },
@@ -906,7 +658,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       ? 'Place Order'
                                       : 'Add Payment Method First',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: isSmallScreen ? 16 : 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -923,26 +675,375 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Widget _buildSummaryRow(String label, double amount) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
-          ),
-          Text(
-            'SGD \$${amount.toStringAsFixed(2)}',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.brown.shade700,
+  // Mobile-optimized cart item layout
+  Widget _buildMobileCartItem(Map<String, dynamic> item, int index) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Product Image - smaller for mobile
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  item['img'],
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
+            SizedBox(width: 12),
+
+            // Product Details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item['name'],
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.brown.shade700,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    item['desc'],
+                    style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.shade100,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      'SGD \$${(item['price'] * (item['quantity'] ?? 1)).toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.orange.shade800,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Delete Button
+            IconButton(
+              icon: Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  Icons.delete_outline,
+                  color: Colors.red.shade600,
+                  size: 18,
+                ),
+              ),
+              onPressed: () => _showRemoveDialog(index),
+            ),
+          ],
+        ),
+
+        SizedBox(height: 12),
+
+        // Quantity Controls - Full width on mobile
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(20),
           ),
-        ],
-      ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.remove_circle_outline,
+                  size: 24,
+                  color: Colors.orange.shade600,
+                ),
+                onPressed: () {
+                  if (item['quantity'] > 1) {
+                    setState(() {
+                      item['quantity']--;
+                    });
+                    widget.onCartChanged(_cart);
+                  } else {
+                    _removeItem(index);
+                  }
+                },
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  '${item['quantity'] ?? 1}',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown.shade700,
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.add_circle_outline,
+                  size: 24,
+                  color: Colors.orange.shade600,
+                ),
+                onPressed: () {
+                  if ((item['quantity'] ?? 1) < item['stock']) {
+                    setState(() {
+                      item['quantity']++;
+                    });
+                    widget.onCartChanged(_cart);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            Icon(Icons.pets, color: Colors.white),
+                            SizedBox(width: 8),
+                            Text('Reached max stock limit!'),
+                          ],
+                        ),
+                        backgroundColor: Colors.orange.shade600,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
+
+  // Desktop cart item layout (original)
+  Widget _buildDesktopCartItem(Map<String, dynamic> item, int index) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 4,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              item['img'],
+              width: 120,
+              height: 120,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item['name'],
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.brown.shade700,
+                ),
+              ),
+              SizedBox(height: 4),
+              Text(
+                item['desc'],
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: 8),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade100,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  'SGD \$${(item['price'] * (item['quantity'] ?? 1)).toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.orange.shade800,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 12),
+              Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.remove_circle_outline,
+                            size: 20,
+                            color: Colors.orange.shade600,
+                          ),
+                          onPressed: () {
+                            if (item['quantity'] > 1) {
+                              setState(() {
+                                item['quantity']--;
+                              });
+                              widget.onCartChanged(_cart);
+                            } else {
+                              _removeItem(index);
+                            }
+                          },
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            '${item['quantity'] ?? 1}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown.shade700,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.add_circle_outline,
+                            size: 20,
+                            color: Colors.orange.shade600,
+                          ),
+                          onPressed: () {
+                            if ((item['quantity'] ?? 1) < item['stock']) {
+                              setState(() {
+                                item['quantity']++;
+                              });
+                              widget.onCartChanged(_cart);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Row(
+                                    children: [
+                                      Icon(Icons.pets, color: Colors.white),
+                                      SizedBox(width: 8),
+                                      Text('Reached max stock limit!'),
+                                    ],
+                                  ),
+                                  backgroundColor: Colors.orange.shade600,
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  IconButton(
+                    icon: Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.delete_outline,
+                        color: Colors.red.shade600,
+                        size: 20,
+                      ),
+                    ),
+                    onPressed: () => _showRemoveDialog(index),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showRemoveDialog(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Removal'),
+          content: Text('Are you sure you want to remove this item from cart?'),
+          actions: [
+            TextButton(
+              child: Text('No', style: TextStyle(color: Colors.grey)),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text('Yes, Remove', style: TextStyle(color: Colors.red)),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _removeItem(index);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+Widget _buildSummaryRow(String label, double amount) {
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: 4),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+        ),
+        Text(
+          'SGD \$${amount.toStringAsFixed(2)}',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.brown.shade700,
+          ),
+        ),
+      ],
+    ),
+  );
 }
