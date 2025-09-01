@@ -872,7 +872,7 @@ class _ShopPageState extends State<ShopPage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  'SGD \$${product['price']},',
+                  'SGD \$${product['price']}',
                   style: TextStyle(
                     color: Colors.orange.shade800,
                     fontSize: screenWidth < 600
@@ -953,7 +953,6 @@ class _ShopPageState extends State<ShopPage> {
                     _buildProductCard(context, products[index]),
               ),
 
-              // Only show navigation arrows on larger screens
               Positioned(
                 left: 0,
                 top: 0,
