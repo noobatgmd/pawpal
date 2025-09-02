@@ -145,49 +145,142 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage>
   // Replace your existing _uploadVaccinationRecord method with this:
   Future<void> _uploadVaccinationRecord() async {
     try {
-      // Show options for camera or gallery
+      // Show options for camera or gallery with proper mobile constraints
       final ImageSource? source = await showDialog<ImageSource>(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (context) => Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: Row(
-            children: [
-              Icon(
-                Icons.add_a_photo,
-                color: Color.fromARGB(255, 129, 210, 230),
-              ),
-              SizedBox(width: 8),
-              Text(
-                "Add Vaccination Record",
-                style: TextStyle(
-                  color: Color(0xFF2D4A3E),
-                  fontWeight: FontWeight.w600,
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.9,
+              maxHeight: MediaQuery.of(context).size.height * 0.6,
+            ),
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Header
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(
+                          255,
+                          129,
+                          210,
+                          230,
+                        ).withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.add_a_photo,
+                        color: Color.fromARGB(255, 129, 210, 230),
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        "Add Vaccination Record",
+                        style: TextStyle(
+                          color: Color(0xFF2D4A3E),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+
+                SizedBox(height: 16),
+
+                // Content
+                Text(
+                  "Choose how you want to add your vaccination record:",
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                ),
+
+                SizedBox(height: 24),
+
+                // Action buttons
+                Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () =>
+                            Navigator.pop(context, ImageSource.camera),
+                        icon: Icon(Icons.camera_alt, color: Colors.white),
+                        label: Text(
+                          "Camera",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 129, 210, 230),
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 12),
+
+                    Container(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () =>
+                            Navigator.pop(context, ImageSource.gallery),
+                        icon: Icon(Icons.photo_library, color: Colors.white),
+                        label: Text(
+                          "Gallery",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 163, 181, 209),
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 12),
+
+                    Container(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context, null),
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          content: Text(
-            "Choose how you want to add your vaccination record:",
-            style: TextStyle(color: Colors.grey[600]),
-          ),
-          actions: [
-            TextButton.icon(
-              onPressed: () => Navigator.pop(context, ImageSource.camera),
-              icon: Icon(Icons.camera_alt),
-              label: Text("Camera"),
-            ),
-            TextButton.icon(
-              onPressed: () => Navigator.pop(context, ImageSource.gallery),
-              icon: Icon(Icons.photo_library),
-              label: Text("Gallery"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, null),
-              child: Text("Cancel"),
-            ),
-          ],
         ),
       );
 
